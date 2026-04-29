@@ -1,0 +1,40 @@
+:root{
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+}
+body{
+    font-family: "Roboto", sans-serif;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-family: "Roboto", sans-serif;
+    font-size: 36px;
+}
+
+p{
+    color: var(--secondary-color);
+}
+
+.card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 900px) {
+    h1 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 18px;
+    }
+    .card {
+        padding: 15px;
+    }
+}
+
