@@ -27,6 +27,9 @@ p{
     h1 {
         font-size: 24px;
     }
+    .card {
+        padding: 10px;
+    }
 }
 
 @media (max-width: 600px) {
