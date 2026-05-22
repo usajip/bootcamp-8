@@ -1,19 +1,23 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return "Selamat datang di halaman utama ecommerce-8!";
-});
+// Route::get('contoh', [App\Http\Controllers\ContohController::class, 'index']
+// );
 
-Route::get('products', function () {
-    return view('landing_page');
-});
+// Route::resource('crud', App\Http\Controllers\CRUDController::class);
 
-Route::get('cart', function () {
-    return "Ini adalah halaman keranjang belanja ecommerce-8.";
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('detail-product/{id}', [ProductController::class, 'show'])->name('detail-product');
+
+Route::resource('product', ProductController::class);
+
+Route::get('cart', [CartController::class, 'index'])->name('cart');
 
 Route::get('checkout', function () {
     return "Ini adalah halaman checkout ecommerce-8.";
-});
+})->name('checkout');
