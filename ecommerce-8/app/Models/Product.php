@@ -6,5 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'price',
+        'stock',
+        'image',
+        'product_category_id', // Pastikan ini sesuai dengan nama kolom foreign key di database
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id'); // Sesuaikan dengan nama foreign key
+    }
+
+    // factory() method untuk menghubungkan dengan ProductFactory
+    protected static function factory()
+    {
+        return \Database\Factories\ProductFactory::new();
+    }
 }
