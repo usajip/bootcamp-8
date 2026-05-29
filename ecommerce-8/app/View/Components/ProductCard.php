@@ -15,7 +15,9 @@ class ProductCard extends Component
         public string $title,
         public string $description,
         public string $image,
-        public string $link
+        public string $link,
+        public string $category,
+        public int $price,
     )
     {
         //

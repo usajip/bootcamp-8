@@ -18,7 +18,12 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(ProductCategory::class, 'product_category_id'); // Sesuaikan dengan nama foreign key
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
     // factory() method untuk menghubungkan dengan ProductFactory

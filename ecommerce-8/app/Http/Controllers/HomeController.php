@@ -2,64 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Home Page';
-        $products = [
-            [
-                'id'=> 1,
-                'title' => 'Product 1',
-                'description' => 'Description for product 1',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 2,
-                'title' => 'Product 2',
-                'description' => 'Description for product 2',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 3,
-                'title' => 'Product 3',
-                'description' => 'Description for product 3',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 4,
-                'title' => 'Product 4',
-                'description' => 'Description for product 4',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 5,
-                'title' => 'Product 5',
-                'description' => 'Description for product 5',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 6,
-                'title' => 'Product 6',
-                'description' => 'Description for product 6',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-            [
-                'id'=> 7,
-                'title' => 'Product 7',
-                'description' => 'Description for product 7',
-                'image' => 'example.jpeg',
-                'link' => '#'
-            ],
-        ];
-        return view('home', compact('title', 'products'));
+        $categories = ProductCategory::all();
+        $products = Product::with('category');
+        
+        if($request->has('category') && !empty($request->category)) {
+            $products->whereHas('category', function($query) use ($request) {
+                $query->where('slug', $request->category);
+            });
+        }
+
+        if($request->has('search')) {
+            $products->where('name', 'like', '%'. $request->search . '%');
+        }
+
+        if(
+            $request->has('sort') 
+            && in_array($request->sort, ['asc', 'desc'])
+        ) {
+            $products->orderBy('price', $request->sort);
+        }
+
+        // terlaris
+        if($request->has('sort') && $request->sort == 'best_seller') {
+            $products->withCount(['orderItems' => function($query) {
+                    $query->whereHas('order', function($query) {
+                        $query->where('status', 'completed');
+                    });
+                }])
+                ->orderBy('order_items_count', 'desc');
+        }
+
+        $products = $products->paginate(15);
+
+        return view('home', compact('title', 'products', 'categories'));
     }
 }
