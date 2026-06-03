@@ -10,9 +10,44 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->input('search');
+        $sort = $request->input('sort');
+        $products = Product::with('category')
+            ->withCount(['orderItems' => function($query) {
+                $query->whereHas('order', function($query) {
+                    $query->where('status', 'completed');
+                });
+            }])
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhereHas('category', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->when($sort, function ($query, $sort) {
+                switch ($sort) {
+                    case 'asc':
+                        $query->orderBy('price', 'asc');
+                        break;
+                    case 'desc':
+                        $query->orderBy('price', 'desc');
+                        break;
+                    case 'best_seller':
+                        $query->orderBy('order_items_count', 'desc');
+                        break;
+                    case 'stock_low':
+                        $query->orderBy('stock', 'asc');
+                        break;
+                    case 'stock_high':
+                        $query->orderBy('stock', 'desc');
+                        break;
+                };
+            })
+            ->paginate(5);
+        return view('dashboards.products.index', compact('products'));
     }
 
     /**
