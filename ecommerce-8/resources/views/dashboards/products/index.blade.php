@@ -66,8 +66,12 @@
                                 </td>
                                 <td class="px-4 py-2 border">
                                     <div class="flex flex-wrap gap-2">
-                                        <button class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer">Edit</button>
-                                        <button class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
+                                        <a href="{{ route('dashboard.products.edit', $product) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer">Edit</a>
+                                        <form action="{{ route('dashboard.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

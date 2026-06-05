@@ -12,6 +12,27 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('cart') }}">Cart</a>
         </li>
+        @guest
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('register') }}">Register</a>
+        </li>
+        @else
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+        </li>
+        @endguest
+
+        @auth
+        <li class="nav-item">
+          <form action="{{ route('logout') }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to logout?');">
+            @csrf
+            <button type="submit" class="nav-link btn btn-link">Logout</button> {{-- Use a button to submit the form --}}
+          </form>
+        </li>
+        @endauth
       </ul>
     </div>
   </div>

@@ -4,7 +4,10 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Product Categories') }}
             </h2>
-            <a href="{{ route('dashboard.product-categories.create') }}" class="bg-green-500 text-white px-4 py-2 rounded">Add Category</a>
+            <x-primary-button
+                x-data=""
+                x-on:click.prevent="$dispatch('open-modal', 'add-category')"
+            >{{ __('Add Category') }}</x-primary-button>
         </div>
     </x-slot>
 
@@ -64,11 +67,42 @@
                                 <td class="px-4 py-2 border">Rp{{ number_format($category->total_value, 0, ',', '.') }}</td>
                                 <td class="px-4 py-2 border">
                                     <div class="flex flex-wrap gap-2">
-                                        <button class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer">Edit</button>
-                                        <button class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
+                                        <button class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer" x-data=""
+                                        x-on:click.prevent="$dispatch('open-modal', 'edit-category{{ $category->id }}')">Edit</button>
+                                        <form action="{{ route('dashboard.product-categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
+                            @push('scripts')
+                            <!-- Edit Modal -->
+                            <x-modal name="edit-category{{ $category->id }}" focusable>
+                                <div class="p-6 flex justify-between items-center">
+                                    <h2 class="text-lg font-medium text-gray-900">
+                                        {{ __('Edit Product Category') }}
+                                    </h2>
+                                    <button
+                                        x-on:click="$dispatch('close')"
+                                        class="bg-gray-500 text-white px-4 py-2 rounded"
+                                    >X</button>
+                                </div>
+                                <hr>
+                                <form method="post" action="{{ route('dashboard.product-categories.update', $category) }}" class="p-6">
+                                    @csrf
+                                    @method('PUT')
+                                    <div>
+                                        <x-input-label for="name" :value="__('Category Name')" />
+                                        <x-text-input id="name" class="block mt-1 w-full p-2" type="text" name="name" value="{{ $category->name }}" required autofocus />
+                                    </div>
+                                    <div class="mt-4">
+                                        <x-primary-button>{{ __('Update Category') }}</x-primary-button>
+                                    </div>
+                                </form>
+                            </x-modal>
+                            @endpush
                             @endforeach
                             {{-- More rows can be added here --}}
                         </tbody>
@@ -81,4 +115,28 @@
             </div>
         </div>
     </div>
+@push('scripts')
+    <x-modal name="add-category" focusable>
+        <div class="p-6 flex justify-between items-center">
+            <h2 class="text-lg font-medium text-gray-900">
+                {{ __('Add New Product Category') }}
+            </h2>
+            <button
+                x-on:click="$dispatch('close')"
+                class="bg-gray-500 text-white px-4 py-2 rounded"
+            >X</button>
+        </div>
+        <hr>
+        <form method="post" action="{{ route('dashboard.product-categories.store') }}" class="p-6">
+            @csrf
+            <div>
+                <x-input-label for="name" :value="__('Category Name')" />
+                <x-text-input id="name" class="block mt-1 w-full p-2" type="text" name="name" required autofocus />
+            </div>
+            <div class="mt-4">
+                <x-primary-button>{{ __('Add Category') }}</x-primary-button>
+            </div>
+        </form>
+    </x-modal>
+@endpush
 </x-app-layout>
