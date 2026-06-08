@@ -10,9 +10,10 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orders = Order::orderBy('created_at', 'desc')->paginate(10);
+        return view('dashboards.orders.index', compact('orders'));
     }
 
     /**
