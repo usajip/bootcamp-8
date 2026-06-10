@@ -25,7 +25,7 @@ Route::get('checkout', function () {
 })->name('checkout');
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('dashboard')->group(function () {
+    Route::prefix('dashboard')->middleware('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('/products', ProductController::class)->names('dashboard.products');
         Route::resource('/product-categories', ProductCategoryController::class)->names('dashboard.product-categories');

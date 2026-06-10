@@ -12,6 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @if(Auth::user()->role === 'admin')
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -24,6 +25,7 @@
                     <x-nav-link :href="route('dashboard.orders.index')" :active="request()->routeIs('dashboard.orders.*')">
                         {{ __('Orders') }}
                     </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -76,9 +78,20 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @if(Auth::user()->role === 'admin')
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard.products.index')" :active="request()->routeIs('dashboard.products.*')">
+                {{ __('Products') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard.product-categories.index')" :active="request()->routeIs('dashboard.product-categories.*')">
+                {{ __('Product Categories') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard.orders.index')" :active="request()->routeIs('dashboard.orders.*')">
+                {{ __('Orders') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

@@ -20,9 +20,11 @@
           <a class="nav-link" href="{{ route('register') }}">Register</a>
         </li>
         @else
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-        </li>
+          @if(Auth::user()->role === 'admin')
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+          </li>
+          @endif
         @endguest
 
         @auth
