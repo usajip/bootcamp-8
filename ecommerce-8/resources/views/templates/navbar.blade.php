@@ -36,6 +36,12 @@
         </li>
         @endauth
       </ul>
+      <form action="{{ route('home') }}" method="GET" role="search" class="d-flex">
+          <input type="hidden" name="category" value="{{ request('category') }}">
+          <input type="hidden" name="sort" value="{{ request('sort') }}">
+          <input type="text" name="search" class="form-control me-2" placeholder="Search products..." aria-label="Search" value="{{ request('search') }}">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

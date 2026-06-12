@@ -71,60 +71,16 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(string $slug)
     {
-        $product = [
-            'id' => $id,
-            'title' => "Product $id",
-            'description' => "Description for product $id",
-            'image' => 'example.jpeg',
-            'price' => rand(10, 100) * 1000000,
-            'link' => '#'
-        ];
-
-        $recommendation_products = [
-            [
-                'id'=> 1,
-                'title' => 'Product 1',
-                'description' => 'Description for product 1',
-                'image' => 'example.jpeg',
-                'price' => rand(10, 100) * 1000000,
-                'link' => '#'
-            ],
-            [
-                'id'=> 2,
-                'title' => 'Product 2',
-                'description' => 'Description for product 2',
-                'image' => 'example.jpeg',
-                'price' => rand(10, 100) * 1000000,
-                'link' => '#'
-            ],
-            [
-                'id'=> 3,
-                'title' => 'Product 3',
-                'description' => 'Description for product 3',
-                'image' => 'example.jpeg',
-                'price' => rand(10, 100) * 1000000,
-                'link' => '#'
-            ],
-            [
-                'id'=> 4,
-                'title' => 'Product 4',
-                'description' => 'Description for product 4',
-                'image' => 'example.jpeg',
-                'price' => rand(10, 100) * 1000000,
-                'link' => '#'
-            ],
-            [
-                'id'=> 5,
-                'title' => 'Product 5',
-                'description' => 'Description for product 5',
-                'image' => 'example.jpeg',
-                'price' => rand(10, 100) * 1000000,
-                'link' => '#'
-            ]
-        ];
-        return view('product.show', compact('product', 'recommendation_products'));
+        $product = Product::with('category')
+                        ->where('slug', $slug)
+                        ->firstOrFail();
+        $related_products = Product::where('product_category_id', $product->product_category_id)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+        return view('product.show', compact('product', 'related_products'));
     }
 
     /**

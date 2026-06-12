@@ -13,8 +13,9 @@ class ProductCategoryController extends Controller
      */
     public function index(Request $request)
     {
+        // ORM 
         $categories = ProductCategory::withCount([
-            'products',
+            'products', // products_count
             'products as total_stock' => function($query) {
                 $query->select(DB::raw("SUM(stock)"));
             },
@@ -48,6 +49,7 @@ class ProductCategoryController extends Controller
             };
         })
         ->paginate(5);
+
         return view('dashboards.product_categories.index', compact('categories'));
     }
 

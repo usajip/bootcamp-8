@@ -9,6 +9,7 @@
         {{-- product category filter will go here and search bar --}}
             {{-- Category filter with select option --}}
         <form action="{{ route('home') }}" method="GET" role="search" class="d-flex justify-content-between align-items-center mb-3">
+            <input type="hidden" name="search" value="{{ request('search') }}">
             <div class="form-group">
                 <label for="category" class="form-label">Filter by Category:</label>
                 <select name="category" id="category" class="form-select" onchange="this.form.submit()">
@@ -30,20 +31,16 @@
                     <option value="best_seller" {{ request('sort') == 'best_seller' ? 'selected' : '' }}>Best Seller</option>
                 </select>
             </div>
-            <div class="d-flex">
-                <input class="form-control me-2" type="search" name="search" placeholder="Search products..." aria-label="Search" value="{{ request('search') }}">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </div>
         </form>
 
-        <div class="flex-row d-flex flex-wrap justify-content-between gap-3 mb-3">
+        <div class="flex-row d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
             @forelse($products as $item)
             {{-- <div class="col-md-2"> --}}
                 <x-product-card 
                     title="{{ $item->name }}" 
                     description="{{ $item->description }}" 
                     image="{{ asset('images/' . $item->image) }}" 
-                    link="{{ route('detail-product', ['id' => $item->id]) }}"
+                    link="{{ route('detail-product', ['slug' => $item->slug]) }}"
                     category="{{ $item->category->name }}"
                     price="{{ $item->price }}"
                 />

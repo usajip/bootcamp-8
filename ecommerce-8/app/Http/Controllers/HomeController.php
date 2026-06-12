@@ -41,6 +41,12 @@ class HomeController extends Controller
                 ->orderBy('order_items_count', 'desc');
         }
 
+        if($request->has('sort') && $request->sort == 'review_positive') {
+            $products->whereHas('reviews', function($query) {
+                $query->where('rating', '>=', 4);
+            });
+        }
+
         $products = $products->paginate(15);
 
         return view('home', compact('title', 'products', 'categories'));
