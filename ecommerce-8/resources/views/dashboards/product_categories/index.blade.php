@@ -14,6 +14,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-auto shadow-sm sm:rounded-lg">
+                {{-- Success & Error Messages --}}
+                @include('layouts.success_error_message')
                 <div class="p-6 text-gray-900">
                     {{-- Filter and search form can be added here --}}
                     <div class="flex flex-wrap justify-between gap-2 mb-4">
@@ -63,13 +65,13 @@
                                 <td class="px-4 py-2 border">{{ $category->name }}</td>
                                 <td class="px-4 py-2 border">{{ $category->slug }}</td>
                                 <td class="px-4 py-2 border">{{ $category->products_count }}</td>
-                                <td class="px-4 py-2 border">{{ $category->total_stock }}</td>
+                                <td class="px-4 py-2 border">{{ $category->total_stock ?? 0 }}</td>
                                 <td class="px-4 py-2 border">Rp{{ number_format($category->total_value, 0, ',', '.') }}</td>
                                 <td class="px-4 py-2 border">
                                     <div class="flex flex-wrap gap-2">
                                         <button class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer" x-data=""
                                         x-on:click.prevent="$dispatch('open-modal', 'edit-category{{ $category->id }}')">Edit</button>
-                                        <form action="{{ route('dashboard.product-categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                        <form action="{{ route('dashboard.product-categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete category with id {{ $category->id }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
@@ -94,8 +96,8 @@
                                     @csrf
                                     @method('PUT')
                                     <div>
-                                        <x-input-label for="name" :value="__('Category Name')" />
-                                        <x-text-input id="name" class="block mt-1 w-full p-2" type="text" name="name" value="{{ $category->name }}" required autofocus />
+                                        <x-input-label for="nameEdit{{ $category->id }}" :value="__('Category Name')" />
+                                        <x-text-input id="nameEdit{{ $category->id }}" class="block mt-1 w-full p-2" type="text" name="name" value="{{ $category->name }}" required autofocus />
                                     </div>
                                     <div class="mt-4">
                                         <x-primary-button>{{ __('Update Category') }}</x-primary-button>
@@ -127,8 +129,7 @@
             >X</button>
         </div>
         <hr>
-        <form method="post" action="{{ route('dashboard.product-categories.store') }}" class="p-6">
-            @csrf
+        <form method="post" action="{{ route('dashboard.product-categories.store') }}" class="p-6" id="add-category-form"> @csrf
             <div>
                 <x-input-label for="name" :value="__('Category Name')" />
                 <x-text-input id="name" class="block mt-1 w-full p-2" type="text" name="name" required autofocus />
@@ -138,5 +139,25 @@
             </div>
         </form>
     </x-modal>
+    <script>
+        // input validation for add category form
+        document.getElementById('add-category-form').addEventListener('submit', function(event) {
+            const nameInput = document.getElementById('name');
+            if (nameInput.value.trim() === '') {
+                event.preventDefault();
+                alert('Category name is required.');
+            }
+
+            if(nameInput.value.length > 100) {
+                event.preventDefault();
+                alert('Category name must be less than 100 characters.');
+            }
+
+            if(nameInput.value.length < 3) {
+                event.preventDefault();
+                alert('Category name must be at least 3 characters.');
+            }
+        });
+    </script>
 @endpush
 </x-app-layout>

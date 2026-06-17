@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->middleware('admin')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('/products', ProductController::class)->names('dashboard.products');
-        Route::resource('/product-categories', ProductCategoryController::class)->names('dashboard.product-categories');
+        Route::resource('/product-categories', ProductCategoryController::class)->names('dashboard.product-categories')->except(['create', 'edit']);
         Route::resource('/orders', OrderController::class)->names('dashboard.orders');
     });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

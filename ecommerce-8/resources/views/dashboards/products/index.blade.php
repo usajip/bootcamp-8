@@ -11,6 +11,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                @include('layouts.success_error_message')
                 <div class="p-6 text-gray-900">
                     <div class="flex flex-wrap justify-between gap-2 mb-4">
                         {{-- Sort by filter --}}
@@ -49,6 +50,7 @@
                                 <th class="px-4 py-2 border">Stock</th>
                                 <th class="px-4 py-2 border">Category</th>
                                 <th class="px-4 py-2 border">Image</th>
+                                <th class="px-4 py-2 border">Sold</th>
                                 <th class="px-4 py-2 border">Actions</th>
                             </tr>
                         </thead>
@@ -62,12 +64,13 @@
                                 <td class="px-4 py-2 border">{{ $product->stock }}</td>
                                 <td class="px-4 py-2 border">{{ $product->category->name }}</td>
                                 <td class="px-4 py-2 border">
-                                    <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}">
+                                    <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}" class="max-h-16">
                                 </td>
+                                <td class="px-4 py-2 border">{{ $product->order_items_count }}</td>
                                 <td class="px-4 py-2 border">
                                     <div class="flex flex-wrap gap-2">
                                         <a href="{{ route('dashboard.products.edit', $product) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer">Edit</a>
-                                        <form action="{{ route('dashboard.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                        <form action="{{ route('dashboard.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete product with id {{ $product->id }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded cursor-pointer">Delete</button>
