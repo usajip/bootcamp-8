@@ -20,7 +20,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 {{ $total_7_days_order_data > 0 ? '' : 'hidden' }}">
                 {{-- Chart.js canvas for weekly order data: total order and total revenue --}}
                 <div class="mt-6">
                     <canvas id="weeklyOrderChart"></canvas>
@@ -45,15 +45,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($recent_orders as $order)
+                            @forelse($recent_orders as $order)
                                 <tr>
-                                    <td class="py-2 px-4 border-b">{{ $order['order_number'] }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $order['name'] }}</td>
-                                    <td class="py-2 px-4 border-b">{{ number_format($order['total_price'], 0, ',', '.') }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $order['status'] }}</td>
-                                    <td class="py-2 px-4 border-b">{{ $order['order_date'] }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $order->order_number }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $order->name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $order->status }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $order->created_at->format('Y-m-d') }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="py-2 px-4 border-b text-center">No recent orders found.</td>
+                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>

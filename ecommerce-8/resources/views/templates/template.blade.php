@@ -15,7 +15,9 @@
     </style>
 </head>
 <body>
-    @include('templates.navbar')
+    @if(!isset($no_navbar) || !$no_navbar)
+        @include('templates.navbar')
+    @endif
     <main>
     @yield('content')
     </main>
@@ -23,6 +25,8 @@
     {{-- Bootstrap 5 js cdn --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
-    @include('templates.footer')
+    @if(!isset($no_navbar) || !$no_navbar)
+        @include('templates.footer')
+    @endif
 </body>
 </html>

@@ -124,6 +124,15 @@ class ProductController extends Controller
             ->where('id', '!=', $product->id)
             ->take(4)
             ->get();
+        
+        // Click tracking using session to prevent multiple clicks from the same user in a short period of time
+        $sessionKey = 'product_click_' . $product->id;
+        if (!session()->has($sessionKey)) {
+            $product->clicks += 1;
+            $product->save();
+            session()->put($sessionKey, true);
+        }
+
         return view('product.show', compact('product', 'related_products'));
     }
 

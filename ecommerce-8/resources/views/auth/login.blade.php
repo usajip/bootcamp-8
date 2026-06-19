@@ -1,8 +1,23 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+    <!-- Validation Errors -->
+    
     <form method="POST" action="{{ route('login') }}">
+        @if(session('errors'))
+            <div style="color: red; margin-bottom: 1rem;background-color: #f8d7da; padding: 1rem; border-radius: 0.25rem;">
+                <ul>
+                    @foreach(session('errors')->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if(session('error'))
+            <div style="color: red; margin-bottom: 1rem;background-color: #f8d7da; padding: 1rem; border-radius: 0.25rem;">
+                {{ session('error') }}
+            </div>
+        @endif
         @csrf
 
         <!-- Email Address -->

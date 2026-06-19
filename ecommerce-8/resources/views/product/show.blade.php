@@ -5,6 +5,25 @@
 @section('content')
     <div class="container mt-5">
         <div class="row">
+            @if(session('success'))
+                <div class="alert alert-success d-flex align-items-center justify-content-between">
+                    <div>{{ session('success') }}</div>
+                    <a href="{{ route('cart') }}" class="btn btn-primary">Lihat Keranjang</a>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @elseif(session('errors'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach(session('errors')->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="col-md-6">
                 <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid w-100 mb-3 rounded">
             </div>
@@ -13,7 +32,16 @@
                 <h1>{{ $product->name }}</h1>
                 <p>{{ $product->description }}</p>
                 <p class="h4 text-primary">Price: Rp{{ number_format($product->price, 0, ',', '.') }}</p>
-                <a href="{{ route('home') }}" class="btn btn-secondary">Kembali ke Home</a>
+                <p>Stock: {{ $product->stock }}</p>
+                <form action="{{ route('cart.add', ['id' => $product->id]) }}" method="GET"  class="d-flex align-items-center gap-3 mt-4">
+                    {{-- quantity input can be added here --}}
+                    <div class="input-group" style="width: 120px;">
+                        <button class="btn btn-outline-secondary" type="button" id="button-decrease">-</button>
+                        <input type="text" class="form-control text-center" max="{{ $product->stock }}" name="quantity" value="1" id="quantity-input">
+                        <button class="btn btn-outline-secondary" type="button" id="button-increase">+</button>
+                    </div>
+                    <button type="submit" class="btn  {{ $product->stock <= 0 ? 'btn-secondary' : 'btn-primary' }}" {!! $product->stock <= 0 ? 'onclick="alert(\'Stock tidak tersedia\')"' : '' !!}>Tambahkan ke Keranjang</button>
+                </form>
             </div>
         </div>
         <div class="row mt-5">
@@ -32,5 +60,24 @@
                     @endforeach
                 </div>
             </div>
+        </div>
     </div>
+<script>
+    document.getElementById('button-decrease').addEventListener('click', function() {
+        var quantityInput = document.getElementById('quantity-input');
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
+    });
+
+    document.getElementById('button-increase').addEventListener('click', function() {
+        var quantityInput = document.getElementById('quantity-input');
+        var currentValue = parseInt(quantityInput.value);
+        var maxValue = parseInt(quantityInput.getAttribute('max'));
+        if (currentValue < maxValue) {
+            quantityInput.value = currentValue + 1;
+        }
+    });
+</script>
 @endsection

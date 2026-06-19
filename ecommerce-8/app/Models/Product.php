@@ -13,6 +13,7 @@ class Product extends Model
         'price',
         'stock',
         'image',
+        'clicks', // Tambahkan kolom clicks ke dalam fillable
         'product_category_id', // Pastikan ini sesuai dengan nama kolom foreign key di database
     ];
 

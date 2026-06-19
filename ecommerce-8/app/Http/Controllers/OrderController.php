@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -21,7 +23,21 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        if(Auth::check()){
+            $cart_items = CartItem::with('product')
+                            ->where('user_id', Auth::id())
+                            ->whereHas('product', function($query) {
+                                $query->where('stock', '>', 0);
+                            })
+                            ->get();
+            if($cart_items->isEmpty()){
+                return redirect()->route('cart')->withError('Keranjang Anda kosong atau semua produk dalam keranjang sudah habis.');
+            }
+            $user = Auth::user();
+            return view('orders.checkout', compact('cart_items', 'user'));
+        }else{
+            return redirect()->route('login')->withError('Anda harus login untuk melakukan checkout.');
+        }
     }
 
     /**

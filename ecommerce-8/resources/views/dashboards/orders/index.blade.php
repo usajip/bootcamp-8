@@ -55,7 +55,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($orders as $order)
+                            @forelse($orders as $order)
                             <tr>
                                 <td class="px-4 py-2 border">{{ $order->id }}</td>
                                 <td class="px-4 py-2 border">{{ $order->customer_name }}</td>
@@ -76,7 +76,11 @@
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="px-4 py-2 border text-center">No orders found.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                     <div class="mt-4">
