@@ -25,6 +25,9 @@
             <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
           </li>
           @endif
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('order.list') }}">Orders</a>
+          </li>
         @endguest
 
         @auth

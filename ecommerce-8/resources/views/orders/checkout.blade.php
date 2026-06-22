@@ -11,6 +11,7 @@ $no_navbar = true;
             @if($cart_items->isEmpty())
                 <p>Keranjang belanja Anda kosong.</p>
             @else
+                @include('layouts.success_error_message', ['ui' => 'bootstrap'])
                 <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr>
@@ -41,7 +42,7 @@ $no_navbar = true;
                 </div>
                 {{-- User Info completion name, phone, address --}}
                 <h2 class="mt-5">Informasi Pengiriman</h2>
-                <form action="{{ route('checkout') }}" method="POST">
+                <form action="{{ route('order.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Lengkap</label>

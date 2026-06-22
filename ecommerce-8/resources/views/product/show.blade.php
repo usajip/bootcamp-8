@@ -5,25 +5,7 @@
 @section('content')
     <div class="container mt-5">
         <div class="row">
-            @if(session('success'))
-                <div class="alert alert-success d-flex align-items-center justify-content-between">
-                    <div>{{ session('success') }}</div>
-                    <a href="{{ route('cart') }}" class="btn btn-primary">Lihat Keranjang</a>
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @elseif(session('errors'))
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach(session('errors')->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('layouts.success_error_message', ['ui' => 'bootstrap', 'cart'=>true])
             <div class="col-md-6">
                 <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid w-100 mb-3 rounded">
             </div>

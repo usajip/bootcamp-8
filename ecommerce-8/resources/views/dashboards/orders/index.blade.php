@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    @include('layouts.success_error_message')
                     <div class="flex flex-wrap justify-between gap-2 mb-4">
                         {{-- Sort by filter --}}
                         <form action="{{ route('dashboard.orders.index') }}" method="GET">
@@ -51,20 +52,24 @@
                                 <th class="px-4 py-2 border">Total Amount</th>
                                 <th class="px-4 py-2 border">Status</th>
                                 <th class="px-4 py-2 border">Order Date</th>
+                                @if(Auth::user()->role === 'admin')
                                 <th class="px-4 py-2 border">Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($orders as $order)
                             <tr>
-                                <td class="px-4 py-2 border">{{ $order->id }}</td>
-                                <td class="px-4 py-2 border">{{ $order->customer_name }}</td>
-                                <td class="px-4 py-2 border">Rp{{ number_format($order->total_amount, 0, ',', '.') }}</td>
+                                <td class="px-4 py-2 border">
+                                    <a href="{{ route('order.invoice', ['order_number' => $order->order_number]) }}" class="text-blue-500 hover:underline">
+                                    {{ $order->order_number }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2 border">{{ $order->name }}</td>
+                                <td class="px-4 py-2 border">Rp{{ number_format($order->total_price, 0, ',', '.') }}</td>
                                 <td class="px-4 py-2 border">{{ $order->status }}</td>
                                 <td class="px-4 py-2 border">{{ $order->created_at->format('d-m-Y') }}</td>
-                                <td class="px-4 py-2 border">
-                                    <img src="{{ asset('images/' . $order->image) }}" alt="{{ $order->name }}">
-                                </td>
+                                @if(Auth::user()->role === 'admin')
                                 <td class="px-4 py-2 border">
                                     <div class="flex flex-wrap gap-2">
                                         <a href="{{ route('dashboard.orders.edit', $order) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded cursor-pointer">Edit</a>
@@ -75,6 +80,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                                 <tr>

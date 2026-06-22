@@ -88,6 +88,7 @@
         minimumFractionDigits: 0
     });
     let weeklyOrderData = @json($weekly_order_data);
+    console.log(weeklyOrderData);
     let ctx = document.getElementById('weeklyOrderChart').getContext('2d');
     let weeklyOrderChart = new Chart(ctx, {
         type: 'line',

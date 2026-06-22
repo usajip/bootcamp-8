@@ -12,7 +12,7 @@ class Order extends Model
         'address',
         'phone',
         'total_price',
-        'status',
+        'status', // pending, processing, completed, cancelled with default value 'pending'
         'user_id',
     ];
 

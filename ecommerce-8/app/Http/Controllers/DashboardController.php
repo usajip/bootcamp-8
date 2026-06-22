@@ -84,14 +84,21 @@ class DashboardController extends Controller
             ->keyBy('date');
 
         // Fill in missing dates with 0 values
-        $weekly_order_data = collect($dates)->map(function ($date) use ($weekly_order_data) {
-            return [
+        // $weekly_order_data = collect($dates)->map(function ($date) use ($weekly_order_data) {
+        //     return [
+        //         'date' => $date,
+        //         'total_order' => $weekly_order_data->get($date)->total_order ?? 0,
+        //         'total_revenue' => $weekly_order_data->get($date)->total_revenue ?? 0,
+        //     ];
+        // });
+        $data = [];
+        foreach($dates as $date) {
+            $data[] = [
                 'date' => $date,
                 'total_order' => $weekly_order_data->get($date)->total_order ?? 0,
                 'total_revenue' => $weekly_order_data->get($date)->total_revenue ?? 0,
             ];
-        });
-
-        return $weekly_order_data;
+        }
+        return $data;
     }
 }

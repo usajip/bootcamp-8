@@ -22,10 +22,10 @@
                     <x-nav-link :href="route('dashboard.product-categories.index')" :active="request()->routeIs('dashboard.product-categories.*')">
                         {{ __('Product Categories') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard.orders.index')" :active="request()->routeIs('dashboard.orders.*')">
+                    @endif
+                    <x-nav-link :href="route('order.list')" :active="request()->routeIs('order.list')">
                         {{ __('Orders') }}
                     </x-nav-link>
-                    @endif
                 </div>
             </div>
 
@@ -88,10 +88,10 @@
             <x-responsive-nav-link :href="route('dashboard.product-categories.index')" :active="request()->routeIs('dashboard.product-categories.*')">
                 {{ __('Product Categories') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard.orders.index')" :active="request()->routeIs('dashboard.orders.*')">
+            @endif
+            <x-responsive-nav-link :href="route('order.list')" :active="request()->routeIs('order.list')">
                 {{ __('Orders') }}
             </x-responsive-nav-link>
-            @endif
         </div>
 
         <!-- Responsive Settings Options -->
